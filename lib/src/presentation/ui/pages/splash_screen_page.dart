@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:app_online_booking/src/core/resources.dart';
 import 'package:app_online_booking/src/presentation/classes/fade_route.dart';
 import 'package:app_online_booking/src/presentation/ui/pages/login_page.dart';
@@ -13,51 +13,60 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final String logo = AssetsResources.logo;
+  final String title = 'Borondo';
+  final String subTitle = 'City Stroll';
+
   @override
   void initState() {
     super.initState();
-    toHome(context);
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      toHome(context);
+    });
   }
 
   void toHome(BuildContext context) async {
-    await Future.delayed(const Duration(milliseconds: 900));
     Navigator.pushReplacement(context, FadeRoute(page: const LoginPage()));
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final logoSize = size.width * 0.25;
+
     return Scaffold(
       backgroundColor: const Color(AppColor.primary),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Container(
-            height: 400,
-            margin: const EdgeInsets.only(bottom: 50),
+            height: size.height * 0.5,
+            margin: EdgeInsets.only(bottom: size.height * 0.05),
             width: double.infinity,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SvgPicture.asset(
-                  AssetsResources.logo,
-                  width: 100,
-                  height: 100,
+                  logo,
+                  width: logoSize,
+                  height: logoSize,
                 ),
-                const Column(
+                Column(
                   children: [
                     Text(
-                      'Borondo',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 30,
-                        fontWeight: FontWeight.w900,
-                        fontFamily: 'Roboto',
+                      title,
+                      style: GoogleFonts.paytoneOne(
+                        textStyle: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 45,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    Text("City Stroll",
-                        style: TextStyle(
+                    Text(subTitle,
+                        style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'sans-serif',
                         ))
