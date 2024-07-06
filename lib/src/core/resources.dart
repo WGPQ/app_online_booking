@@ -15,7 +15,9 @@ class AppColor {
 
 class AssetsResources {
   static const logo = 'assets/logo.svg';
-  static const logoPrimary = 'assets/logo-primary.svg';
+  static const logoBorondo = 'assets/logo-borondo.svg';
+  static const logoBorondoBlack = 'assets/logo-borondo-black.svg';
+  static const avatarUser = 'assets/user.png';
   static const logoBanner = 'assets/banner.png';
   static const logoGoogle = 'assets/google.svg';
   static const logoApple = 'assets/apple.svg';

@@ -10,10 +10,8 @@ class BannerContainer extends StatelessWidget {
 
   final ui.Image? image;
   final double? height;
-  final String logoPrimary = AssetsResources.logoPrimary;
+  final String logoBorondo = AssetsResources.logoBorondo;
   final String welcome = 'Welcome to';
-  final String borondo = 'Borondo';
-  final String cityStroll = 'City Stroll';
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +24,7 @@ class BannerContainer extends StatelessWidget {
               color: const Color(AppColor.black), image: image),
         ),
         Positioned(
-          bottom: size.height * 0.02,
+          bottom: size.height * 0.04,
           left: 0,
           right: 0,
           child: Row(
@@ -34,38 +32,28 @@ class BannerContainer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                margin: const EdgeInsets.only(right: 15.0),
-                child: SvgPicture.asset(
-                  logoPrimary,
-                  width: size.width * 0.19,
-                  height: size.width * 0.19,
-                ),
-              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(welcome,
-                      style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      )),
-                  Text(borondo,
-                      style: GoogleFonts.bowlbyOne(
+                  Container(
+                    padding: EdgeInsets.only(left: size.width * 0.19),
+                    child: Text(welcome,
+                        style: GoogleFonts.openSans(
                           textStyle: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 40,
-                      ))),
-                  Transform.translate(
-                      offset: const Offset(0, -17),
-                      child: Text(cityStroll,
-                          style: const TextStyle(
-                              color: Color(AppColor.primary),
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold)))
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        )),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(right: 15.0),
+                    child: SvgPicture.asset(
+                      logoBorondo,
+                      width: size.width * 0.19,
+                      height: size.width * 0.19,
+                    ),
+                  ),
                 ],
               )
             ],

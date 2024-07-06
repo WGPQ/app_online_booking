@@ -2,8 +2,9 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:app_online_booking/src/core/resources.dart';
-import 'package:app_online_booking/src/presentation/classes/fade_route.dart';
+import 'package:app_online_booking/src/presentation/classes/slide_route.dart';
 import 'package:app_online_booking/src/presentation/widgets/custom_button.dart';
 import 'package:app_online_booking/src/presentation/widgets/banner_container.dart';
 import 'package:app_online_booking/src/presentation/widgets/custom_textfield.dart';
@@ -64,13 +65,13 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           _form(size),
-                          const Text(
-                            "Forgot your Password?",
-                            style: TextStyle(
-                                fontSize: 13.0,
-                                color: Color(AppColor.black),
-                                fontWeight: FontWeight.bold),
-                          ),
+                          Text("Forgot your Password?",
+                              style: GoogleFonts.openSans(
+                                textStyle: const TextStyle(
+                                    fontSize: 13.0,
+                                    color: Color(AppColor.black),
+                                    fontWeight: FontWeight.w700),
+                              )),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -81,13 +82,13 @@ class _LoginPageState extends State<LoginPage> {
                                 margin: const EdgeInsets.only(right: 10.0),
                                 color: Colors.grey[300],
                               ),
-                              const Text(
-                                'or',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                              Text('or',
+                                  style: GoogleFonts.openSans(
+                                    textStyle: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.bold),
+                                  )),
                               Container(
                                 height: 2,
                                 width: size.width * 0.3,
@@ -126,8 +127,10 @@ class _LoginPageState extends State<LoginPage> {
                         backgroundColor: const Color(AppColor.red),
                         textColor: const Color(AppColor.white),
                         onPressed: () => {
-                              Navigator.pushReplacement(context,
-                                  FadeRoute(page: const CreateAccountPage()))
+                              Navigator.push(
+                                  context,
+                                  SlideTopRoute(
+                                      page: const CreateAccountPage()))
                             }),
                   ],
                 ),
@@ -158,10 +161,7 @@ class _LoginPageState extends State<LoginPage> {
               text: 'Login',
               backgroundColor: const Color(AppColor.primary),
               textColor: const Color(AppColor.black),
-              onPressed: () => {
-                    Navigator.pushReplacement(
-                        context, FadeRoute(page: const CreateAccountPage()))
-                  }),
+              onPressed: () => {}),
         ],
       ),
     );
