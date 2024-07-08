@@ -30,5 +30,6 @@ class AssetsResources {
   static const paris = 'assets/paris.png';
   static const newYork = 'assets/new-york.png';
   static const japan = 'assets/japon.png';
-  static const londres = 'assets/londres.png';
+  static const africa = 'assets/africa.png';
+  static const ecuador = 'assets/ecuador.webp';
 }

@@ -2,8 +2,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:app_online_booking/src/core/resources.dart';
-import 'package:app_online_booking/src/data/local/local_data.dart';
 import 'package:app_online_booking/src/domain/entities/user.dart';
+import 'package:app_online_booking/src/data/local/local_data.dart';
+import 'package:app_online_booking/src/domain/entities/cities.dart';
 import 'package:app_online_booking/src/presentation/classes/slide_route.dart';
 import 'package:app_online_booking/src/presentation/ui/pages/login_page.dart';
 import 'package:app_online_booking/src/presentation/widgets/custom_tab_bar.dart';
@@ -15,72 +16,85 @@ class HomePage extends StatelessWidget {
   final avatarUser = AssetsResources.avatarUser;
   final iconFilter = AssetsResources.iconFilter;
 
-  final List<dynamic> _cities = [
-    {
-      'name': 'London',
-      'image': AssetsResources.london,
-      'cities': {
-        'Available': 5,
-        'Completed': 3,
-      },
-      'famous_places': {
-        'Available': 12,
-        'Completed': 8,
-      },
-      'traveled': 143
-    },
-    {
-      'name': 'Paris',
-      'image': AssetsResources.paris,
-      'cities': {
-        'Available': 10,
-        'Completed': 1,
-      },
-      'famous_places': {
-        'Available': 22,
-        'Completed': 8,
-      },
-      'traveled': 6
-    },
-    {
-      'name': 'New York',
-      'image': AssetsResources.newYork,
-      'cities': {
-        'Available': 8,
-        'Completed': 8,
-      },
-      'famous_places': {
-        'Available': 16,
-        'Completed': 16,
-      },
-      'traveled': 203
-    },
-    {
-      'name': 'Japón',
-      'image': AssetsResources.japan,
-      'cities': {
-        'Available': 5,
-        'Completed': 3,
-      },
-      'famous_places': {
-        'Available': 12,
-        'Completed': 8,
-      },
-      'traveled': 143
-    },
-    {
-      'name': 'África',
-      'image': AssetsResources.londres,
-      'cities': {
-        'Available': 3,
-        'Completed': 3,
-      },
-      'famous_places': {
-        'Available': 8,
-        'Completed': 8,
-      },
-      'traveled': 143
-    },
+  final List<Cities> _cities = [
+    Cities(
+        name: "London",
+        image: AssetsResources.london,
+        cities: CitiesClass(available: 5, completed: 3),
+        famousPlaces: CitiesClass(available: 12, completed: 8),
+        traveled: 143),
+    Cities(
+        name: 'Paris',
+        image: AssetsResources.paris,
+        cities: CitiesClass(
+          available: 10,
+          completed: 1,
+        ),
+        famousPlaces: CitiesClass(
+          available: 22,
+          completed: 8,
+        ),
+        traveled: 6),
+    Cities(
+        name: 'New York',
+        image: AssetsResources.newYork,
+        cities: CitiesClass(
+          available: 8,
+          completed: 8,
+        ),
+        famousPlaces: CitiesClass(
+          available: 16,
+          completed: 16,
+        ),
+        traveled: 203),
+    Cities(
+        name: 'Japón',
+        image: AssetsResources.japan,
+        cities: CitiesClass(
+          available: 5,
+          completed: 3,
+        ),
+        famousPlaces: CitiesClass(
+          available: 12,
+          completed: 8,
+        ),
+        traveled: 143),
+    Cities(
+        name: 'África',
+        image: AssetsResources.africa,
+        cities: CitiesClass(
+          available: 3,
+          completed: 3,
+        ),
+        famousPlaces: CitiesClass(
+          available: 8,
+          completed: 8,
+        ),
+        traveled: 143),
+    Cities(
+        name: 'Ecuador',
+        image: AssetsResources.ecuador,
+        cities: CitiesClass(
+          available: 3,
+          completed: 2,
+        ),
+        famousPlaces: CitiesClass(
+          available: 8,
+          completed: 2,
+        ),
+        traveled: 143),
+    Cities(
+        name: 'Perú',
+        image: AssetsResources.africa,
+        cities: CitiesClass(
+          available: 3,
+          completed: 1,
+        ),
+        famousPlaces: CitiesClass(
+          available: 11,
+          completed: 7,
+        ),
+        traveled: 143),
   ];
 
   @override
@@ -90,7 +104,7 @@ class HomePage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
-          color: Colors.white,
+          color: Colors.grey[90],
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           margin: EdgeInsets.only(top: size.height * 0.01),
           child: Stack(
@@ -222,7 +236,8 @@ class HomePage extends StatelessWidget {
                     child: ListView.builder(
                       itemCount: _cities.length,
                       itemBuilder: (context, index) {
-                        return _cardCity(_cities, index, _cities.length - 1);
+                        return _cardCity(
+                            _cities[index], index == _cities.length - 1);
                       },
                     ),
                   ),
@@ -240,10 +255,9 @@ class HomePage extends StatelessWidget {
   }
 }
 
-Widget _cardCity(dynamic cities, int index, int length) {
+Widget _cardCity(Cities cities, bool last) {
   return Card(
-    elevation: 0.5,
-    margin: EdgeInsets.only(bottom: index == length ? 85.0 : 15.0),
+    margin: EdgeInsets.only(bottom: last ? 85.0 : 15.0),
     color: Colors.white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(15.0),
@@ -256,7 +270,7 @@ Widget _cardCity(dynamic cities, int index, int length) {
           Expanded(
             flex: 1,
             child: Image.asset(
-              cities[index]['image'],
+              cities.image,
               fit: BoxFit.contain,
             ),
           ),
@@ -273,14 +287,13 @@ Widget _cardCity(dynamic cities, int index, int length) {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        cities[index]['name'],
+                        cities.name,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18.0,
                         ),
                       ),
-                      if (cities[index]['cities']['Available'] ==
-                          cities[index]['cities']['Completed'])
+                      if (cities.cities.available == cities.cities.completed)
                         Container(
                             height: 30,
                             width: 50,
@@ -309,7 +322,7 @@ Widget _cardCity(dynamic cities, int index, int length) {
                             )),
                           ),
                           Text(
-                            '${cities[index]['cities']['Available']}',
+                            '${cities.cities.available}',
                             style: GoogleFonts.openSans(
                                 textStyle: const TextStyle(
                               fontSize: 16.0,
@@ -323,8 +336,7 @@ Widget _cardCity(dynamic cities, int index, int length) {
                                 radius: 9.0,
                                 backgroundColor: const Color(AppColor.primary)
                                     .withOpacity(0.2),
-                                child: Text(
-                                    '${cities[index]['cities']['Completed']}',
+                                child: Text('${cities.cities.completed}',
                                     style: GoogleFonts.openSans(
                                         textStyle: const TextStyle(
                                       fontSize: 9.0,
@@ -357,7 +369,7 @@ Widget _cardCity(dynamic cities, int index, int length) {
                             )),
                           ),
                           Text(
-                            '${cities[index]['famous_places']['Available']}',
+                            '${cities.famousPlaces.available}',
                             style: GoogleFonts.openSans(
                                 textStyle: const TextStyle(
                               fontSize: 16.0,
@@ -371,8 +383,7 @@ Widget _cardCity(dynamic cities, int index, int length) {
                                 radius: 9.0,
                                 backgroundColor: const Color(AppColor.primary)
                                     .withOpacity(0.2),
-                                child: Text(
-                                    '${cities[index]['famous_places']['Completed']}',
+                                child: Text('${cities.famousPlaces.completed}',
                                     style: GoogleFonts.openSans(
                                         textStyle: const TextStyle(
                                       fontSize: 9.0,
@@ -405,7 +416,7 @@ Widget _cardCity(dynamic cities, int index, int length) {
                             )),
                           ),
                           Text(
-                            '${cities[index]['traveled']}',
+                            '${cities.traveled}',
                             style: GoogleFonts.openSans(
                                 textStyle: const TextStyle(
                               fontSize: 16.0,

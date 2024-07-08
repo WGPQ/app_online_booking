@@ -36,6 +36,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   String? avatarUser;
+  bool isLoading = false;
   final String createAccount = 'Create Account';
   final String providesData = 'provide basic data';
 
@@ -126,13 +127,18 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                   ),
                                   child: IconButton(
                                     onPressed: () async {
-                                      final pickedFile = await picker.pickImage(
-                                        imageQuality: 100,
-                                        source: ImageSource.gallery,
-                                      );
-                                      if (pickedFile == null) return;
-                                      avatarUser = pickedFile.path;
-                                      setState(() {});
+                                      try {
+                                        final pickedFile =
+                                            await picker.pickImage(
+                                          imageQuality: 100,
+                                          source: ImageSource.gallery,
+                                        );
+                                        if (pickedFile == null) return;
+                                        avatarUser = pickedFile.path;
+                                        setState(() {});
+                                      } catch (e) {
+                                        print("Error picker File : $e");
+                                      }
                                     },
                                     icon: const Icon(
                                       Icons.add_photo_alternate_outlined,
@@ -234,10 +240,26 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               margin: const EdgeInsets.only(top: 20.0),
               child: CustomButton(
                 text: 'Create Account',
+                waiting: isLoading,
                 backgroundColor: const Color(AppColor.primary),
                 textColor: Colors.black,
                 onPressed: () async {
                   try {
+                    if (_nameController.text.isEmpty ||
+                        _emailController.text.isEmpty ||
+                        _phoneController.text.isEmpty ||
+                        _nationalityController.text.isEmpty ||
+                        _bodController.text.isEmpty ||
+                        _passwordController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text('Please fill in all fields'),
+                        ),
+                      );
+                      return;
+                    }
+
                     CustomUser user = CustomUser(
                       name: _nameController.text,
                       email: _emailController.text,
@@ -246,8 +268,15 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       bod: _bodController.text,
                       password: _passwordController.text,
                     );
+                    setState(() {
+                      isLoading = true;
+                    });
+                    await Future.delayed(const Duration(seconds: 1));
                     await ApiService().createUser(user);
                     LocalData.setDataUser(user);
+                    setState(() {
+                      isLoading = false;
+                    });
                     Navigator.pushReplacement(
                         context,
                         SlideRightRoute(
@@ -255,7 +284,19 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           user: user,
                         )));
                   } catch (e) {
-                    print(e);
+                    setState(() {
+                      isLoading = false;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text('Error: $e'),
+                      ),
+                    );
+                  } finally {
+                    setState(() {
+                      isLoading = false;
+                    });
                   }
                 },
               ),

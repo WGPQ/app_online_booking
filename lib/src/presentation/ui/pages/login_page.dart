@@ -44,6 +44,7 @@ class _LoginPageState extends State<LoginPage> {
   final String logoApple = AssetsResources.logoApple;
   final double sizeIconButton = 50.0;
   final String createAccount = 'Create your account';
+  bool isLoading = false;
   ui.Image? image;
 
   Future<void> loadImage() async {
@@ -85,7 +86,12 @@ class _LoginPageState extends State<LoginPage> {
             )));
       }
     } catch (e) {
-      print("Error--->: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Error: $e'),
+        ),
+      );
     }
   }
 
@@ -223,20 +229,60 @@ class _LoginPageState extends State<LoginPage> {
           ),
           CustomButton(
               text: 'Login',
+              waiting: isLoading,
               backgroundColor: const Color(AppColor.primary),
               textColor: const Color(AppColor.black),
               onPressed: () async {
-                final user = await ApiService()
-                    .login(_emailController.text, _passwordController.text);
-                if (user == null) {
-                  return;
+                try {
+                  if (_emailController.text.isEmpty ||
+                      _passwordController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text('Please fill all fields'),
+                      ),
+                    );
+                    return;
+                  }
+                  setState(() {
+                    isLoading = true;
+                  });
+                  await Future.delayed(const Duration(seconds: 1));
+                  final user = await ApiService()
+                      .login(_emailController.text, _passwordController.text);
+                  if (user == null) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text('Invalid credentials'),
+                      ),
+                    );
+                    return;
+                  }
+                  LocalData.setDataUser(user);
+                  Navigator.push(
+                      context,
+                      SlideTopRoute(
+                          page: HomePage(
+                        user: user,
+                      )));
+                  isLoading = false;
+                  setState(() {});
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text('Error: $e'),
+                    ),
+                  );
+                } finally {
+                  setState(() {
+                    isLoading = false;
+                  });
                 }
-                Navigator.push(
-                    context,
-                    SlideTopRoute(
-                        page: HomePage(
-                      user: user,
-                    )));
               }),
         ],
       ),
