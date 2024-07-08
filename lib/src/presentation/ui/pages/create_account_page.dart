@@ -1,12 +1,14 @@
 import 'dart:ui' as ui;
-import 'package:app_online_booking/src/presentation/widgets/custom_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:app_online_booking/src/core/resources.dart';
+import 'package:app_online_booking/src/presentation/classes/slide_route.dart';
+import 'package:app_online_booking/src/presentation/ui/pages/login_page.dart';
 import 'package:app_online_booking/src/presentation/widgets/custom_button.dart';
 import 'package:app_online_booking/src/presentation/widgets/banner_container.dart';
 import 'package:app_online_booking/src/presentation/widgets/custom_textfield.dart';
+import 'package:app_online_booking/src/presentation/widgets/custom_date_picker.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -121,26 +123,30 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   ),
                   _form(size),
                   SizedBox(height: size.height * 0.05),
-                  Text.rich(TextSpan(
-                    text: 'Already have an account? ',
-                    style: GoogleFonts.openSans(
-                      textStyle: const TextStyle(
-                          fontSize: 16.0,
-                          color: Color(AppColor.black),
-                          fontWeight: FontWeight.w400),
-                    ),
-                    children: [
-                      TextSpan(
-                        text: 'Sing in',
-                        style: GoogleFonts.openSans(
-                          textStyle: const TextStyle(
-                              fontSize: 16.0,
-                              color: Color(AppColor.primary),
-                              fontWeight: FontWeight.w700),
-                        ),
-                      )
-                    ],
-                  ))
+                  InkWell(
+                    onTap: () => Navigator.pushReplacement(
+                        context, SlideRightRoute(page: const LoginPage())),
+                    child: Text.rich(TextSpan(
+                      text: 'Already have an account? ',
+                      style: GoogleFonts.openSans(
+                        textStyle: const TextStyle(
+                            fontSize: 16.0,
+                            color: Color(AppColor.black),
+                            fontWeight: FontWeight.w400),
+                      ),
+                      children: [
+                        TextSpan(
+                          text: 'Sing in',
+                          style: GoogleFonts.openSans(
+                            textStyle: const TextStyle(
+                                fontSize: 16.0,
+                                color: Color(AppColor.primary),
+                                fontWeight: FontWeight.w700),
+                          ),
+                        )
+                      ],
+                    )),
+                  )
                 ],
               ),
             ),

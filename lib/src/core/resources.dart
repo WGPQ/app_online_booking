@@ -21,4 +21,14 @@ class AssetsResources {
   static const logoBanner = 'assets/banner.png';
   static const logoGoogle = 'assets/google.svg';
   static const logoApple = 'assets/apple.svg';
+  static const iconCities = 'assets/icons/cities.svg';
+  static const iconRoutes = 'assets/icons/routes.svg';
+  static const iconMap = 'assets/icons/map.svg';
+  static const iconPlus = 'assets/icons/plus.svg';
+  static const iconFilter = 'assets/icons/filter.svg';
+  static const london = 'assets/london.png';
+  static const paris = 'assets/paris.png';
+  static const newYork = 'assets/new-york.png';
+  static const japan = 'assets/japon.png';
+  static const londres = 'assets/londres.png';
 }
