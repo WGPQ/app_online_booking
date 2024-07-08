@@ -63,7 +63,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
         hintText: widget.label,
         hintStyle: GoogleFonts.openSans(
           textStyle: const TextStyle(
-              color: Colors.grey, fontSize: 18.0, fontWeight: FontWeight.w400),
+              color: Colors.grey, fontSize: 16.0, fontWeight: FontWeight.w400),
         ),
         prefixIcon: Icon(
           widget.icon,

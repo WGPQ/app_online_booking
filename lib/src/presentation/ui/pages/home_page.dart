@@ -2,11 +2,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:app_online_booking/src/core/resources.dart';
+import 'package:app_online_booking/src/data/local/local_data.dart';
+import 'package:app_online_booking/src/domain/entities/user.dart';
+import 'package:app_online_booking/src/presentation/classes/slide_route.dart';
+import 'package:app_online_booking/src/presentation/ui/pages/login_page.dart';
 import 'package:app_online_booking/src/presentation/widgets/custom_tab_bar.dart';
 import 'package:app_online_booking/src/presentation/widgets/custom_bottom_navigation_bar.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
+  HomePage({super.key, required this.user});
+  final CustomUser user;
   final avatarUser = AssetsResources.avatarUser;
   final iconFilter = AssetsResources.iconFilter;
 
@@ -86,7 +91,8 @@ class HomePage extends StatelessWidget {
       body: SafeArea(
         child: Container(
           color: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          margin: EdgeInsets.only(top: size.height * 0.01),
           child: Stack(
             children: [
               Column(
@@ -102,10 +108,19 @@ class HomePage extends StatelessWidget {
                                 fontWeight: FontWeight.w700,
                                 color: Colors.black)),
                       ),
-                      CircleAvatar(
-                        backgroundImage: AssetImage(avatarUser),
-                        radius: 30.0,
-                        backgroundColor: const Color(AppColor.primary),
+                      InkWell(
+                        onLongPress: () {
+                          LocalData.removePreferences();
+                          Navigator.pushReplacement(context,
+                              SlideRightRoute(page: const LoginPage()));
+                        },
+                        child: CircleAvatar(
+                          backgroundImage: user.avatar != null
+                              ? Image.network(user.avatar!).image
+                              : AssetImage(avatarUser),
+                          radius: 25.0,
+                          backgroundColor: const Color(AppColor.primary),
+                        ),
                       )
                     ],
                   ),
@@ -155,21 +170,33 @@ class HomePage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           TextButton(
                               onPressed: () {},
+                              style: ButtonStyle(
+                                  padding: WidgetStateProperty.all(
+                                      const EdgeInsets.only(
+                                          right: 5.0, left: 0))),
                               child: Text(
                                 "All",
                                 style: _styleTextButton(true),
                               )),
                           TextButton(
                               onPressed: () {},
+                              style: ButtonStyle(
+                                  padding: WidgetStateProperty.all(
+                                      const EdgeInsets.only(left: 0.0))),
                               child: Text(
                                 "Completed",
                                 style: _styleTextButton(false),
                               )),
                           TextButton(
                               onPressed: () {},
+                              style: ButtonStyle(
+                                  padding: WidgetStateProperty.all(
+                                      const EdgeInsets.only(left: 15.0))),
                               child: Text(
                                 "Not Completed",
                                 style: _styleTextButton(false),
@@ -179,6 +206,8 @@ class HomePage extends StatelessWidget {
                       IconButton(
                         onPressed: () {},
                         icon: SvgPicture.asset(iconFilter,
+                            height: 15,
+                            width: 15,
                             colorFilter: const ColorFilter.mode(
                                 Colors.grey, BlendMode.srcIn)),
                       )
@@ -235,17 +264,34 @@ Widget _cardCity(dynamic cities, int index, int length) {
             flex: 3,
             child: Container(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+                  const EdgeInsets.symmetric(horizontal: 7.0, vertical: 2.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    cities[index]['name'],
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        cities[index]['name'],
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      if (cities[index]['cities']['Available'] ==
+                          cities[index]['cities']['Completed'])
+                        Container(
+                            height: 30,
+                            width: 50,
+                            decoration: const BoxDecoration(
+                                color: Color(AppColor.primary),
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(50.0),
+                                  bottomLeft: Radius.circular(200.0),
+                                )),
+                            child: const Icon(Icons.check, color: Colors.black))
+                    ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -257,7 +303,7 @@ Widget _cardCity(dynamic cities, int index, int length) {
                             'Cities',
                             style: GoogleFonts.openSans(
                                 textStyle: const TextStyle(
-                              fontSize: 13.0,
+                              fontSize: 12.0,
                               color: Colors.grey,
                               fontWeight: FontWeight.w400,
                             )),
@@ -266,7 +312,7 @@ Widget _cardCity(dynamic cities, int index, int length) {
                             '${cities[index]['cities']['Available']}',
                             style: GoogleFonts.openSans(
                                 textStyle: const TextStyle(
-                              fontSize: 20.0,
+                              fontSize: 16.0,
                               color: Colors.grey,
                               fontWeight: FontWeight.w700,
                             )),
@@ -274,23 +320,23 @@ Widget _cardCity(dynamic cities, int index, int length) {
                           Row(
                             children: [
                               CircleAvatar(
-                                radius: 8.0,
+                                radius: 9.0,
                                 backgroundColor: const Color(AppColor.primary)
                                     .withOpacity(0.2),
                                 child: Text(
                                     '${cities[index]['cities']['Completed']}',
                                     style: GoogleFonts.openSans(
                                         textStyle: const TextStyle(
-                                      fontSize: 10.0,
+                                      fontSize: 9.0,
                                       color: Color(AppColor.primary),
                                       fontWeight: FontWeight.w400,
                                     ))),
                               ),
-                              const SizedBox(width: 2.0),
+                              const SizedBox(width: 1.0),
                               Text("Completed",
                                   style: GoogleFonts.openSans(
                                       textStyle: const TextStyle(
-                                    fontSize: 10.0,
+                                    fontSize: 9.0,
                                     color: Color(AppColor.primary),
                                     fontWeight: FontWeight.w400,
                                   ))),
@@ -305,7 +351,7 @@ Widget _cardCity(dynamic cities, int index, int length) {
                             'Famous places',
                             style: GoogleFonts.openSans(
                                 textStyle: const TextStyle(
-                              fontSize: 13.0,
+                              fontSize: 12.0,
                               color: Colors.grey,
                               fontWeight: FontWeight.w400,
                             )),
@@ -314,7 +360,7 @@ Widget _cardCity(dynamic cities, int index, int length) {
                             '${cities[index]['famous_places']['Available']}',
                             style: GoogleFonts.openSans(
                                 textStyle: const TextStyle(
-                              fontSize: 20.0,
+                              fontSize: 16.0,
                               color: Colors.grey,
                               fontWeight: FontWeight.w700,
                             )),
@@ -322,14 +368,14 @@ Widget _cardCity(dynamic cities, int index, int length) {
                           Row(
                             children: [
                               CircleAvatar(
-                                radius: 8.0,
+                                radius: 9.0,
                                 backgroundColor: const Color(AppColor.primary)
                                     .withOpacity(0.2),
                                 child: Text(
                                     '${cities[index]['famous_places']['Completed']}',
                                     style: GoogleFonts.openSans(
                                         textStyle: const TextStyle(
-                                      fontSize: 10.0,
+                                      fontSize: 9.0,
                                       color: Color(AppColor.primary),
                                       fontWeight: FontWeight.w400,
                                     ))),
@@ -338,7 +384,7 @@ Widget _cardCity(dynamic cities, int index, int length) {
                               Text("Completed",
                                   style: GoogleFonts.openSans(
                                       textStyle: const TextStyle(
-                                    fontSize: 10.0,
+                                    fontSize: 9.0,
                                     color: Color(AppColor.primary),
                                     fontWeight: FontWeight.w400,
                                   ))),
@@ -347,13 +393,13 @@ Widget _cardCity(dynamic cities, int index, int length) {
                         ],
                       ),
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             'Traveled',
                             style: GoogleFonts.openSans(
                                 textStyle: const TextStyle(
-                              fontSize: 13.0,
+                              fontSize: 12.0,
                               color: Colors.grey,
                               fontWeight: FontWeight.w400,
                             )),
@@ -362,7 +408,7 @@ Widget _cardCity(dynamic cities, int index, int length) {
                             '${cities[index]['traveled']}',
                             style: GoogleFonts.openSans(
                                 textStyle: const TextStyle(
-                              fontSize: 20.0,
+                              fontSize: 16.0,
                               color: Colors.grey,
                               fontWeight: FontWeight.w700,
                             )),
@@ -371,7 +417,7 @@ Widget _cardCity(dynamic cities, int index, int length) {
                             'Km',
                             style: GoogleFonts.openSans(
                                 textStyle: const TextStyle(
-                              fontSize: 13.0,
+                              fontSize: 10.0,
                               color: Colors.grey,
                               fontWeight: FontWeight.w400,
                             )),
@@ -393,7 +439,7 @@ Widget _cardCity(dynamic cities, int index, int length) {
 TextStyle _styleTextButton(bool active) {
   return GoogleFonts.openSans(
       textStyle: TextStyle(
-          fontSize: 14.0,
+          fontSize: 12.0,
           color: active ? const Color(AppColor.primary) : Colors.grey,
           fontWeight: FontWeight.w700));
 }

@@ -1,3 +1,5 @@
+import 'package:app_online_booking/src/data/local/local_data.dart';
+import 'package:app_online_booking/src/presentation/ui/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:app_online_booking/src/core/resources.dart';
@@ -18,13 +20,22 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 2000), () {
-      toHome(context);
-    });
+    initializeApp(context);
   }
 
-  void toHome(BuildContext context) async {
-    Navigator.pushReplacement(context, FadeRoute(page: const LoginPage()));
+  void initializeApp(BuildContext context) async {
+    await Future.delayed(const Duration(milliseconds: 900));
+    final user = await LocalData.getDataUser();
+    if (user != null) {
+      Navigator.pushReplacement(
+          context,
+          FadeRoute(
+              page: HomePage(
+            user: user,
+          )));
+    } else {
+      Navigator.pushReplacement(context, FadeRoute(page: const LoginPage()));
+    }
   }
 
   @override

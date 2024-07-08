@@ -1,14 +1,20 @@
+import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:app_online_booking/src/core/resources.dart';
+import 'package:app_online_booking/src/data/local/local_data.dart';
+import 'package:app_online_booking/src/domain/entities/user.dart';
+import 'package:app_online_booking/src/infrastructure/api_service.dart';
+import 'package:app_online_booking/src/presentation/ui/pages/home_page.dart';
 import 'package:app_online_booking/src/presentation/classes/slide_route.dart';
 import 'package:app_online_booking/src/presentation/ui/pages/login_page.dart';
 import 'package:app_online_booking/src/presentation/widgets/custom_button.dart';
 import 'package:app_online_booking/src/presentation/widgets/banner_container.dart';
 import 'package:app_online_booking/src/presentation/widgets/custom_textfield.dart';
 import 'package:app_online_booking/src/presentation/widgets/custom_date_picker.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -20,7 +26,16 @@ class CreateAccountPage extends StatefulWidget {
 class _CreateAccountPageState extends State<CreateAccountPage> {
   ui.Image? image;
 
-  final avatarUser = AssetsResources.avatarUser;
+  final avatarUserDefault = AssetsResources.avatarUser;
+  final ApiService apiService = ApiService();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _nationalityController = TextEditingController();
+  final TextEditingController _bodController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  String? avatarUser;
   final String createAccount = 'Create Account';
   final String providesData = 'provide basic data';
 
@@ -32,6 +47,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     setState(() {});
   }
 
+  final picker = ImagePicker();
   @override
   void initState() {
     loadImage();
@@ -65,7 +81,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                               createAccount,
                               style: GoogleFonts.openSans(
                                   textStyle: const TextStyle(
-                                fontSize: 24,
+                                fontSize: 20,
                                 fontWeight: FontWeight.w800,
                               )),
                             ),
@@ -75,7 +91,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 providesData,
                                 style: GoogleFonts.openSans(
                                     textStyle: const TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w400,
                                 )),
                               ),
@@ -83,16 +99,19 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           ],
                         ),
                         SizedBox(
-                          height: 100.0,
-                          width: 110.0,
+                          height: 90.0,
+                          width: 100.0,
                           child: Stack(
                             children: [
                               CircleAvatar(
                                 backgroundColor: Colors.black12,
-                                radius: 50.0,
+                                radius: 45.0,
                                 child: CircleAvatar(
-                                  backgroundImage: AssetImage(avatarUser),
-                                  radius: 45.0,
+                                  backgroundImage: avatarUser != null
+                                      ? FileImage(File(avatarUser!))
+                                      : AssetImage(avatarUserDefault)
+                                          as ImageProvider,
+                                  radius: 40.0,
                                   backgroundColor:
                                       const Color(AppColor.primary),
                                 ),
@@ -100,13 +119,21 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                               Align(
                                 alignment: Alignment.bottomRight,
                                 child: Container(
-                                  height: 40,
+                                  height: 35,
                                   decoration: const BoxDecoration(
                                     color: Color(AppColor.primary),
                                     shape: BoxShape.circle,
                                   ),
                                   child: IconButton(
-                                    onPressed: () async {},
+                                    onPressed: () async {
+                                      final pickedFile = await picker.pickImage(
+                                        imageQuality: 100,
+                                        source: ImageSource.gallery,
+                                      );
+                                      if (pickedFile == null) return;
+                                      avatarUser = pickedFile.path;
+                                      setState(() {});
+                                    },
                                     icon: const Icon(
                                       Icons.add_photo_alternate_outlined,
                                       size: 25,
@@ -159,54 +186,83 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       ),
     );
   }
-}
 
-Widget _form(Size size) {
-  return Container(
-    width: size.width,
-    color: Colors.white,
-    child: Column(
-      children: [
-        const CustomTextField(
-          label: "Name",
-          icon: Icons.person_outline,
-          type: TextInputType.text,
+  Widget _form(Size size) {
+    return Container(
+      width: size.width,
+      color: Colors.white,
+      child: Form(
+        child: Column(
+          children: [
+            CustomTextField(
+              label: "Name",
+              controller: _nameController,
+              icon: Icons.person_outline,
+              type: TextInputType.text,
+            ),
+            CustomTextField(
+              label: "Email",
+              controller: _emailController,
+              icon: Icons.email_outlined,
+              type: TextInputType.emailAddress,
+            ),
+            CustomTextField(
+              label: "Phone",
+              controller: _phoneController,
+              icon: Icons.phone_outlined,
+              type: TextInputType.phone,
+            ),
+            CustomTextField(
+              label: "Nationality",
+              controller: _nationalityController,
+              icon: Icons.location_city_outlined,
+              type: TextInputType.emailAddress,
+            ),
+            CustomDatePicker(
+              label: "Birthday date",
+              controller: _bodController,
+              icon: Icons.date_range_outlined,
+              type: TextInputType.emailAddress,
+            ),
+            CustomTextField(
+              label: "Password",
+              controller: _passwordController,
+              icon: Icons.lock_outline,
+              type: TextInputType.visiblePassword,
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20.0),
+              child: CustomButton(
+                text: 'Create Account',
+                backgroundColor: const Color(AppColor.primary),
+                textColor: Colors.black,
+                onPressed: () async {
+                  try {
+                    CustomUser user = CustomUser(
+                      name: _nameController.text,
+                      email: _emailController.text,
+                      phone: _phoneController.text,
+                      nationality: _nationalityController.text,
+                      bod: _bodController.text,
+                      password: _passwordController.text,
+                    );
+                    await ApiService().createUser(user);
+                    LocalData.setDataUser(user);
+                    Navigator.pushReplacement(
+                        context,
+                        SlideRightRoute(
+                            page: HomePage(
+                          user: user,
+                        )));
+                  } catch (e) {
+                    print(e);
+                  }
+                },
+              ),
+            )
+          ],
         ),
-        const CustomTextField(
-          label: "Email",
-          icon: Icons.email_outlined,
-          type: TextInputType.emailAddress,
-        ),
-        const CustomTextField(
-          label: "Phone",
-          icon: Icons.phone_outlined,
-          type: TextInputType.phone,
-        ),
-        const CustomTextField(
-          label: "Nationality",
-          icon: Icons.location_city_outlined,
-          type: TextInputType.emailAddress,
-        ),
-        const CustomDatePicker(
-          label: "Birthday date",
-          icon: Icons.date_range_outlined,
-          type: TextInputType.emailAddress,
-        ),
-        const CustomTextField(
-          label: "Password",
-          icon: Icons.lock_outline,
-          type: TextInputType.visiblePassword,
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 20.0),
-          child: CustomButton(
-            text: 'Create Account',
-            backgroundColor: const Color(AppColor.primary),
-            textColor: Colors.black,
-            onPressed: () => {},
-          ),
-        )
-      ],
-    ),
-  );
+      ),
+    );
+  }
 }

@@ -48,7 +48,7 @@ class _CustomTabBarState extends State<CustomTabBar>
               labelColor: const Color(AppColor.white),
               labelStyle: GoogleFonts.openSans(
                 textStyle: const TextStyle(
-                  fontSize: 16.0,
+                  fontSize: 13.0,
                   fontWeight: FontWeight.w400,
                 ),
               ),

@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "638584125590",
+    "firebase_url": "https://login-flutter-9daf8.firebaseio.com",
+    "project_id": "login-flutter-9daf8",
+    "storage_bucket": "login-flutter-9daf8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638584125590:android:f382b4cc5ab635ca5deab7",
+        "android_client_info": {
+          "package_name": "com.example.app_login_google"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638584125590-ebnkhv5f3cch5bnp6dqa7piagme5v343.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.app_login_google",
+            "certificate_hash": "7b5245f79e3cd1f42f88f821c57a894b56c52a07"
+          }
+        },
+        {
+          "client_id": "638584125590-8mvivmicfb58s7i2ajm3ghi36909l927.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzaiTMmhtREVHZCy-WCKAJoagOE7Z5mhk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638584125590-8mvivmicfb58s7i2ajm3ghi36909l927.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "638584125590-428i422kjjjcucrp7qb8ohig5uqdasgc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.apponlinebooking"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638584125590:android:ff0e3b39815843a15deab7",
+        "android_client_info": {
+          "package_name": "com.example.app_online_booking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638584125590-49lroone0cokk58m1dgd8v83b6qi7jcb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.app_online_booking",
+            "certificate_hash": "2d0cdad4bbd85b4f0acb8fd66e24cf86253072e9"
+          }
+        },
+        {
+          "client_id": "638584125590-8mvivmicfb58s7i2ajm3ghi36909l927.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzaiTMmhtREVHZCy-WCKAJoagOE7Z5mhk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638584125590-8mvivmicfb58s7i2ajm3ghi36909l927.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "638584125590-428i422kjjjcucrp7qb8ohig5uqdasgc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.apponlinebooking"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

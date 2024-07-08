@@ -56,7 +56,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           hintStyle: GoogleFonts.openSans(
             textStyle: const TextStyle(
                 color: Colors.grey,
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w400),
           ),
           prefixIcon: widget.icon != null
